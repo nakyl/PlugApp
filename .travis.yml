@@ -1,0 +1,44 @@
+language: android
+
+sudo: false
+
+jdk: oraclejdk8
+
+android:
+ components:
+    - tools
+    - build-tools-24.0.2
+    - android-22
+    - android-24
+    - sys-img-armeabi-v7a-android-22
+    - extra-android-m2repository
+
+before_script:
+  # Create and start emulator
+  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
+script: ./gradlew connectedAndroidTest
+
+addons:
+  sonarqube:
+    token:
+      secure: "VNeM9xHB1CW5twZvO1HE6ICE/Zh6LPyXM+66AX8Jlq1+YFs74TtUoFZYG/nPtkAyaEO2TuAPLs++nmuwUND1pffg3lG9nSKO+2STAtFTwI5ZxKMqEjySK6gp5zRGOBfJ5RQlddykuckjrE8EcaDbDjKCZqctcndW4QFs+/kxZq+J79HTZKAncXEyDlimoddcXXoKvtw3Uqzf3OPeF+Fk/zckY7Nk/NtiNBHM/P8ZZIJKqEKvVmXR1TBcEJMIa6tO6EkbJR08fFvXE4aoKiXO2cfp4lCS/zoLD4M/WQH6CueHdwmfejYj7mhbmP2myUSxuedBoG16nzk4PpHJIrr7JZYRWr3Tumj8xdGn6sTJDiROaMSVDi4LsecLBWfIfG6NU6KDSuuajkEkTHDPfFlGHjR9JgOH9dS8vBj38a/33Z7AurBU1RLkCktRAnA2BpX2in6WuowQOgoqir9lTBhiFVzxy3/huZKjEW2z2jpgsHULIklRvAqce/5+x7DpYYA9rjM+2YR+OBh59XMpLqgnyEijS9W9/wgLbTzhzgiwhzcvdt3o/vPopJrfzX0OfW8jh0cqNedAct+F0l/hT0wY7HsespI/C7zFrPwyXoO8OVo0DF6qfgxFW1aLarWcjiW3cErowf61ZC6zw+5gF3CQhkMVLpXeQS1dUyQL8O/F5kQ="
+      
+script:
+- sonar-scanner -X
+
+cache:
+  directories:
+    - '$HOME/.sonar/cache'
+    - '$HOME/.gradle/caches/2.8'
+    - '$HOME/.gradle/caches/jars-1'
+    - '$HOME/.gradle/daemon'
+    - '$HOME/.gradle/native'
+    - '$HOME/.gradle/wrapper'
+
+
+notifications:
+email: false
