@@ -6,15 +6,15 @@ import com.google.gson.annotations.SerializedName;
  * Created by Nakyl on 02/02/2017.
  */
 
-public class Status {
-    @SerializedName("status")
-    private String status;
+public class Status {    @SerializedName("statusPlug")
+private String statusPlug;
 
-    public String getStatus() {
-        return status;
+    public String getStatusPlug() {
+        return statusPlug;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatusPlug(String statusPlug) {
+        this.statusPlug = statusPlug;
     }
+
 }

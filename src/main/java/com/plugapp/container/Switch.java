@@ -7,14 +7,14 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class Switch {
-    @SerializedName("status")
-    private String status;
+    @SerializedName("statusPlug")
+    private String statusPlug;
 
-    public String getStatus() {
-        return status;
+    public String getStatusPlug() {
+        return statusPlug;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatusPlug(String statusPlug) {
+        this.statusPlug = statusPlug;
     }
 }

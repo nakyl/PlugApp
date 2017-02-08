@@ -66,9 +66,9 @@ public class ControllerStatus implements Callback<Status> {
 
         final ToggleButton switchButton = (ToggleButton) activity.findViewById(R.id.switchTB);
 
-        if("ON".equals(response.body().getStatus())) {
+        if("ON".equals(response.body().getStatusPlug())) {
             switchButton.setChecked(true);
-        } else if("OFF".equals(response.body().getStatus())) {
+        } else if("OFF".equals(response.body().getStatusPlug())) {
             switchButton.setChecked(false);
         }
     }
