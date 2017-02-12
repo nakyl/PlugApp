@@ -30,7 +30,7 @@ public class ControllerStatus implements Callback<Status> {
 
         // Creación del dialogo
         pd = new ProgressDialog(activity);
-        pd.setMessage("Actualizando");
+        pd.setMessage(activity.getResources().getString(R.string.getStatus));
         pd.setCancelable(false);
         pd.show();
 

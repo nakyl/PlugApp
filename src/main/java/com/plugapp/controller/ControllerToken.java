@@ -25,24 +25,38 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ControllerToken implements Callback<OauthToken> {
 
+    private MainActivity mainActivity;
     private ProgressDialog pd;
-    private MainActivity activity = null;
+    private boolean isEnd = false;
 
-    public ControllerToken(MainActivity activity) {
-            this.activity = activity;
+    public ControllerToken(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
     }
 
-    public Call<OauthToken> start() {
+    public Call<OauthToken> createToken() {
 
-        // Creación del dialogo
-        pd = new ProgressDialog(activity);
-        pd.setMessage("Obteniendo credenciales");
+        // Create Dialog
+        pd = new ProgressDialog(mainActivity);
+        pd.setMessage(mainActivity.getResources().getString(R.string.getToken));
         pd.setCancelable(false);
         pd.show();
 
-        PlugAPI gerritAPI = RetrofitInstance.getInstance().create(PlugAPI.class);
+        PlugAPI gerritAPI = RetrofitInstance.getInstanceToken().create(PlugAPI.class);
 
+        // Call api oauth/token: Basic Auth + username + password + grant type
         Call<OauthToken> call = gerritAPI.getToken("Basic " + Base64.encodeToString("admin:admin".getBytes(), Base64.NO_WRAP), "admin", "admin", "password");
+        call.enqueue(this);
+
+        return call;
+
+    }
+
+    public Call<OauthToken> refreshToken() {
+
+        PlugAPI gerritAPI = RetrofitInstance.getInstanceToken().create(PlugAPI.class);
+
+        // Call api oauth/token: Basic Auth + refresh token + grant type
+        Call<OauthToken> call = gerritAPI.getTokenRefresh("Basic " + Base64.encodeToString("admin:admin".getBytes(), Base64.NO_WRAP), "refresh_token", AccessToken.getInstance().getRefreshToken());
         call.enqueue(this);
 
         return call;
@@ -55,19 +69,28 @@ public class ControllerToken implements Callback<OauthToken> {
 
         if(response.isSuccessful()) {
             oauthToken = response.body();
-        } else {
-            System.out.println(response.errorBody());
         }
 
-        if (pd.isShowing()){
-            pd.dismiss();
-        }
-
+        // Set the new token information
         AccessToken.setOauthToken(oauthToken);
+
+        // Close the dialog
+        if(mainActivity != null) {
+            if (pd.isShowing()) {
+                pd.dismiss();
+            }
+        }
+
+        // Flag this process as finished
+        isEnd = true;
     }
 
     @Override
     public void onFailure(Call<OauthToken> call, Throwable t) {
         t.printStackTrace();
+    }
+
+    public boolean isEnd() {
+        return isEnd;
     }
 }

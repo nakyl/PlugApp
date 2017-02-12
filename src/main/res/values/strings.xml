@@ -5,4 +5,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+
+    <string name="getStatus">Getting status</string>
+    <string name="getToken">Getting Token</string>
+    <string name="onText">ON</string>
+    <string name="offText">OFF</string>
 </resources>

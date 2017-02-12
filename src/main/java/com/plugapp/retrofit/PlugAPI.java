@@ -17,8 +17,11 @@ public interface PlugAPI {
     Call<Status> loadStatus();
 
     @GET("switch")
-    Call<Switch> switchPowerMode(@Query("changeState") String status, @Query("access_token") String accessToken);
+    Call<Switch> switchPowerMode(@Query("changeState") String status);
 
     @POST("oauth/token")
     Call<OauthToken> getToken(@Header("Authorization") String authorization, @Query("username") String username, @Query("password") String password, @Query("grant_type") String grant_type);
+
+    @POST("oauth/token")
+    Call<OauthToken> getTokenRefresh(@Header("Authorization") String authorization, @Query("grant_type") String grantType, @Query("refresh_token") String refreshToken);
 }

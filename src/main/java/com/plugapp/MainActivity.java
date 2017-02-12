@@ -44,17 +44,20 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        new ControllerToken(MainActivity.this).start();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         final ToggleButton switchButton = (ToggleButton) findViewById(R.id.switchTB);
 
-        switchButton.setTextOn("ON");
-        switchButton.setTextOff("OFF");
+        switchButton.setTextOn(getResources().getString(R.string.onText));
+        switchButton.setTextOff(getResources().getString(R.string.offText));
 
+        // Create first instance token
+        new ControllerToken(MainActivity.this).createToken();
+        // Update plug state
         new ControllerStatus(MainActivity.this).start();
 
+        // Add listener toggle button
         switchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
